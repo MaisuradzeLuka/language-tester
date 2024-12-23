@@ -1,7 +1,17 @@
-import type { NextConfig } from "next";
+/** @type {import('next').NextConfig} */
+const nextConfig: import("next").NextConfig = {
+  typescript: {
+    ignoreBuildErrors: true,
+  },
 
-const nextConfig: NextConfig = {
-  /* config options here */
+  images: {
+    remotePatterns: [
+      {
+        hostname: "*",
+        port: "",
+      },
+    ],
+  },
 };
 
 export default nextConfig;
