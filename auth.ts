@@ -27,5 +27,22 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
 
       return true;
     },
+
+    async jwt({ token, profile, account }) {
+      if (profile && account) {
+        const user = await client
+          .withConfig({ useCdn: false })
+          .fetch(USER_BY_ID_QUERY, { id: profile.sub });
+
+        token.id = user.id;
+      }
+
+      return token;
+    },
+
+    async session({ session, token }) {
+      Object.assign(session, { id: token.id });
+      return session;
+    },
   },
 });

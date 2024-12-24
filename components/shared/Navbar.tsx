@@ -1,6 +1,5 @@
 "use client";
 
-import { useState, useEffect } from "react";
 import { SiTicktick } from "react-icons/si";
 import { PiSignOut, PiSignIn } from "react-icons/pi";
 import Link from "next/link";
@@ -15,18 +14,6 @@ import { useSession } from "next-auth/react";
 const Navbar = () => {
   const path = usePathname();
   const { data: session, status } = useSession();
-  // const [session, setSession] = useState<
-  //   import("@auth/core/types").Session | null
-  // >(null);
-
-  // useEffect(() => {
-  //   const fetchSession = async () => {
-  //     const sessionData = await auth();
-  //     setSession(sessionData);
-  //   };
-
-  //   fetchSession();
-  // }, []);
 
   return (
     <nav
