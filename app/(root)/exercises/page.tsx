@@ -18,7 +18,7 @@ const page = async () => {
         {retrivedTests.map((test: any) => (
           <Link
             key={test._id}
-            className="w-full rounded-xl shadow-slate-800 shadow-lg hover:scale-105 duration-75"
+            className="w-full rounded-xl shadow-slate-500 shadow-md hover:scale-105 duration-75"
             href={`/exercises/${test._id}`}
           >
             <Image
@@ -38,9 +38,11 @@ const page = async () => {
               </p>
             </div>
 
-            <div className="mx-2 my-3 text-xs md:text-sm">
-              <p>{test.title}</p>
-              <p className="font-semibold">{test.author.name}</p>
+            <div className="mx-4 my-6 text-xs md:text-sm">
+              <p className="font-semibold text-lg text-gray-500">
+                {test.title}
+              </p>
+              <p className="font-medium text-gray-500">{test.author.name}</p>
             </div>
           </Link>
         ))}

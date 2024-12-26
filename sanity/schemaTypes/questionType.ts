@@ -12,6 +12,11 @@ export const questionType = defineType({
     },
 
     {
+      name: "title",
+      type: "string",
+    },
+
+    {
       name: "slug",
       type: "slug",
       options: {

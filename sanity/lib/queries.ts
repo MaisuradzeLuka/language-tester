@@ -14,6 +14,7 @@ export const TESTS_QUERY =
     _createdAt,
     slug,
     questions,
+    title,
     author -> {name, username, _id, image},
     _id,
   

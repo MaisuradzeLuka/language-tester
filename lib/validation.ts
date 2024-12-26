@@ -9,6 +9,7 @@ const questionSchema = z.object({
 });
 
 export const questionsSchema = z.object({
+  title: z.string().min(3),
   questions: z.array(questionSchema),
 });
 

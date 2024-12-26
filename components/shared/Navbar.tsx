@@ -1,19 +1,18 @@
 "use client";
 
 import { SiTicktick } from "react-icons/si";
-import { PiSignOut, PiSignIn } from "react-icons/pi";
 import Link from "next/link";
 import { navLinks } from "@/constants";
 import { usePathname } from "next/navigation";
 import { SignIn } from "./SignIn";
 import MobileNav from "./MobileNav";
-import { auth } from "@/auth";
 import { SignOut } from "./SignOut";
 import { useSession } from "next-auth/react";
+import Image from "next/image";
 
 const Navbar = () => {
   const path = usePathname();
-  const { data: session, status } = useSession();
+  const { data: session } = useSession();
 
   return (
     <nav
@@ -44,8 +43,20 @@ const Navbar = () => {
           ))}
         </ul>
 
-        <div className="flex gap-3">
-          {session ? <SignOut /> : <SignIn />}
+        <div className="flex items-center gap-3">
+          {session ? (
+            <SignOut>
+              <Image
+                width={36}
+                height={36}
+                alt="profile image"
+                src={session.user?.image || ""}
+                className="rounded-full"
+              />
+            </SignOut>
+          ) : (
+            <SignIn />
+          )}
           <MobileNav path={path} />
         </div>
       </div>

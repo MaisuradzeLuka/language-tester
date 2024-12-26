@@ -12,6 +12,7 @@ export interface IUserData {
 }
 
 export interface IFormInputs {
+  title: string;
   questions: {
     question: string;
     option1: string;

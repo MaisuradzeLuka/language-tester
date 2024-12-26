@@ -24,6 +24,7 @@ export const createQuestion = async (formData: any) => {
 
     const questionType = {
       author: { _type: "reference", _ref: session.id },
+      title: formData.title,
       questions: questionsWithKeys,
       slug: { _type: slug, current: slug },
     };
@@ -32,8 +33,8 @@ export const createQuestion = async (formData: any) => {
       .withConfig({ useCdn: false })
       .create({ _type: "question", ...questionType });
 
-    return { status: "Success", errMsg: "Question uploaded successfully" };
+    return { status: "Success", message: "Question uploaded successfully" };
   } catch (error: any) {
-    return { status: "Error", errMsg: error.message };
+    return { status: "Error", message: error.message };
   }
 };
