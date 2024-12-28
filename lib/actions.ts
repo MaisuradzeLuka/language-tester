@@ -38,3 +38,32 @@ export const createQuestion = async (formData: any) => {
     return { status: "Error", message: error.message };
   }
 };
+
+export const answereTest = async (data: { name: string; value: string }[]) => {
+  const session = await auth();
+
+  if (!session) redirect("/api/auth/signin");
+
+  try {
+    const questionsWithKeys = data.map((question: any) => ({
+      ...question,
+      _key: uuidv4(),
+    }));
+
+    console.log(data);
+
+    const questionType = {
+      author: { _type: "reference", _ref: session.id },
+
+      answers: questionsWithKeys,
+    };
+
+    await writeClient
+      .withConfig({ useCdn: false })
+      .create({ _type: "answeredTest", ...questionType });
+
+    return { status: "Success", message: "Question uploaded successfully" };
+  } catch (error: any) {
+    return { status: "Error", message: error.message };
+  }
+};

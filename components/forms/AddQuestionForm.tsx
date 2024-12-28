@@ -20,10 +20,6 @@ import { redirect } from "next/navigation";
 import { useState } from "react";
 import { Input } from "../ui/input";
 
-interface IUserDetails {
-  userDetails: { userId: string; name: string; lastname: string };
-}
-
 const AddQuestionForm = () => {
   const [isLoading, setIsLoading] = useState(false);
   const form = useForm<z.infer<typeof questionsSchema>>({

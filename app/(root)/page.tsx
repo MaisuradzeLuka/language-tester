@@ -3,7 +3,7 @@ import Link from "next/link";
 
 const Home = () => {
   return (
-    <div className="relative bg-no-repeat bg-cover w-full h-screen overflow-hidden">
+    <main className="relative bg-no-repeat bg-cover w-full h-screen overflow-hidden">
       <div className="relative flex flex-col lg:flex-row justify-evenly lg:justify-between items-center w-full h-full">
         <Image
           src="https://www.topuniversities.com/sites/default/files/styles/articles_inline/public/articles/lead-images/aural%20learning.jpeg.webp"
@@ -34,7 +34,7 @@ const Home = () => {
           ტესტის დაწყება
         </Link>
       </div>
-    </div>
+    </main>
   );
 };
 

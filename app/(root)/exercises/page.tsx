@@ -1,21 +1,31 @@
+import { auth } from "@/auth";
 import { client } from "@/sanity/lib/client";
 import { TESTS_QUERY } from "@/sanity/lib/queries";
+
+import { Question, User as UserType } from "@/sanity/types";
 import { ITest } from "@/types";
 import Image from "next/image";
 import Link from "next/link";
+import { redirect } from "next/navigation";
 import { SiTicktick } from "react-icons/si";
 
+type TestsType = Omit<Question, "author"> & { author?: UserType };
+
 const page = async () => {
-  const retrivedTests = await client.fetch(TESTS_QUERY);
+  const session = await auth();
+
+  if (!session) redirect("/api/auth/signin");
+
+  const retrivedTests: TestsType[] = await client.fetch(TESTS_QUERY);
 
   return (
-    <div className="w-full px-4">
-      <div className="flex justify-center items-center w-full h-12 bg-yellow text-white font-semibold text-2xl my-4">
+    <main className="w-full px-4">
+      <div className="flex-between w-full h-12 bg-yellow text-white font-semibold text-2xl my-4">
         ტესტები
       </div>
 
       <section className="grid grid-cols-2 xs:grid-cols-3 justify-between gap-2 xs:gap-4 lg:gap-6 max-w-[1080px] mx-auto">
-        {retrivedTests.map((test: any) => (
+        {retrivedTests.map((test) => (
           <Link
             key={test._id}
             className="w-full rounded-xl shadow-slate-500 shadow-md hover:scale-105 duration-75"
@@ -29,7 +39,7 @@ const page = async () => {
               className=" aspect-video rounded-t-xl"
             />
 
-            <div className="w-full flex justify-center items-center text-xs md:text-sm h-6 md:h-8 bg-yellow">
+            <div className="w-full flex-between text-xs md:text-sm h-6 md:h-8 bg-yellow pl-2 md:pl-4">
               <p className="flex items-center gap-2 text-white ">
                 <span className=" text-nav-grey ">
                   <SiTicktick />
@@ -38,16 +48,18 @@ const page = async () => {
               </p>
             </div>
 
-            <div className="mx-4 my-6 text-xs md:text-sm">
-              <p className="font-semibold text-lg text-gray-500">
+            <div className="mx-2 md:mx-4 my-6 text-xs md:text-sm">
+              <p className="font-semibold text-[16px] mb-3 md:text-lg text-gray-500">
                 {test.title}
               </p>
-              <p className="font-medium text-gray-500">{test.author.name}</p>
+              <p className="font-medium text-gray-500">
+                {test?.author?.name || ""}
+              </p>
             </div>
           </Link>
         ))}
       </section>
-    </div>
+    </main>
   );
 };
 

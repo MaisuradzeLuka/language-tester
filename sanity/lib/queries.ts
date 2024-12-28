@@ -26,5 +26,5 @@ export const TEST_BY_ID_QUERY =
     slug,
     questions,
     _id,
-  
+    title
 }`);
