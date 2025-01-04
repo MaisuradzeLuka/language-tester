@@ -8,19 +8,27 @@ import { Input } from "@/components/ui/input";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { generateRandomId } from "@/lib/utils";
 import { IFormInputs } from "@/types";
-import { useState } from "react";
-import { Control } from "react-hook-form";
+import { ChangeEvent, useState } from "react";
+import { Control, UseFormSetValue } from "react-hook-form";
 
-const QuestionForm = ({
-  index,
-  control,
-}: {
+interface IQuestionForm {
   index: number;
   control: Control<IFormInputs, any>;
-}) => {
+  setValue: UseFormSetValue<IFormInputs>;
+}
+
+const QuestionForm = ({ index, control, setValue }: IQuestionForm) => {
   const [option1] = useState(generateRandomId(8));
   const [option2] = useState(generateRandomId(8));
   const [option3] = useState(generateRandomId(8));
+
+  const handleChange = (
+    e: ChangeEvent<HTMLInputElement>,
+    id: string,
+    name: string
+  ) => {
+    setValue(name, { value: e.currentTarget.value, id, name });
+  };
 
   return (
     <>
@@ -57,10 +65,19 @@ const QuestionForm = ({
                   <FormField
                     control={control}
                     name={`questions.${index}.option1`}
-                    render={({ field }) => (
+                    render={() => (
                       <FormItem className="flex flex-col gap-2 ">
                         <FormControl>
-                          <Input type="text" {...field} />
+                          <Input
+                            type="text"
+                            onChange={(e) =>
+                              handleChange(
+                                e,
+                                option1,
+                                `questions.${index}.option1`
+                              )
+                            }
+                          />
                         </FormControl>
                         <FormMessage />
                       </FormItem>
@@ -73,10 +90,19 @@ const QuestionForm = ({
                   <FormField
                     control={control}
                     name={`questions.${index}.option2`}
-                    render={({ field }) => (
+                    render={() => (
                       <FormItem className="flex flex-col gap-2 ">
                         <FormControl>
-                          <Input type="text" {...field} />
+                          <Input
+                            type="text"
+                            onChange={(e) =>
+                              handleChange(
+                                e,
+                                option2,
+                                `questions.${index}.option2`
+                              )
+                            }
+                          />
                         </FormControl>
                         <FormMessage />
                       </FormItem>
@@ -89,10 +115,19 @@ const QuestionForm = ({
                   <FormField
                     control={control}
                     name={`questions.${index}.option3`}
-                    render={({ field }) => (
+                    render={() => (
                       <FormItem className="flex flex-col gap-2 ">
                         <FormControl>
-                          <Input type="text" {...field} />
+                          <Input
+                            type="text"
+                            onChange={(e) =>
+                              handleChange(
+                                e,
+                                option3,
+                                `questions.${index}.option3`
+                              )
+                            }
+                          />
                         </FormControl>
                         <FormMessage />
                       </FormItem>

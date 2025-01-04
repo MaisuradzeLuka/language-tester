@@ -125,6 +125,26 @@ export type SanityAssetSourceData = {
   url?: string;
 };
 
+export type AnsweredTest = {
+  _id: string;
+  _type: "answeredTest";
+  _createdAt: string;
+  _updatedAt: string;
+  _rev: string;
+  author?: {
+    _ref: string;
+    _type: "reference";
+    _weak?: boolean;
+    [internalGroqTypeReferenceTo]?: "user";
+  };
+  id?: string;
+  answers?: Array<{
+    name?: string;
+    value?: string;
+    _key: string;
+  }>;
+};
+
 export type Question = {
   _id: string;
   _type: "question";
@@ -141,9 +161,21 @@ export type Question = {
   slug?: Slug;
   questions?: Array<{
     question?: string;
-    option1?: string;
-    option2?: string;
-    option3?: string;
+    option1?: {
+      name?: string;
+      value?: string;
+      id?: string;
+    };
+    option2?: {
+      name?: string;
+      value?: string;
+      id?: string;
+    };
+    option3?: {
+      name?: string;
+      value?: string;
+      id?: string;
+    };
     correctOption?: string;
     _key: string;
   }>;
@@ -167,5 +199,5 @@ export type User = {
   image?: string;
 };
 
-export type AllSanitySchemaTypes = SanityImagePaletteSwatch | SanityImagePalette | SanityImageDimensions | SanityImageHotspot | SanityImageCrop | SanityFileAsset | SanityImageAsset | SanityImageMetadata | Geopoint | SanityAssetSourceData | Question | Slug | User;
+export type AllSanitySchemaTypes = SanityImagePaletteSwatch | SanityImagePalette | SanityImageDimensions | SanityImageHotspot | SanityImageCrop | SanityFileAsset | SanityImageAsset | SanityImageMetadata | Geopoint | SanityAssetSourceData | AnsweredTest | Question | Slug | User;
 export declare const internalGroqTypeReferenceTo: unique symbol;

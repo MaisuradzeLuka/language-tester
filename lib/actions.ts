@@ -39,28 +39,29 @@ export const createQuestion = async (formData: any) => {
   }
 };
 
-export const answereTest = async (data: { name: string; value: string }[]) => {
+export const answereTest = async (
+  data: { name: string; value: string }[],
+  id: string
+) => {
   const session = await auth();
 
   if (!session) redirect("/api/auth/signin");
 
   try {
-    const questionsWithKeys = data.map((question: any) => ({
+    const answeredTestWithKeys = data.map((question: any) => ({
       ...question,
       _key: uuidv4(),
     }));
 
-    console.log(data);
-
-    const questionType = {
+    const answeredTestType = {
       author: { _type: "reference", _ref: session.id },
-
-      answers: questionsWithKeys,
+      id,
+      answers: answeredTestWithKeys,
     };
 
     await writeClient
       .withConfig({ useCdn: false })
-      .create({ _type: "answeredTest", ...questionType });
+      .create({ _type: "answeredTest", ...answeredTestType });
 
     return { status: "Success", message: "Question uploaded successfully" };
   } catch (error: any) {

@@ -15,9 +15,9 @@ export interface IFormInputs {
   title: string;
   questions: {
     question: string;
-    option1: string;
-    option2: string;
-    option3: string;
+    option1: { name: string; value: string; id: string };
+    option2: { name: string; value: string; id: string };
+    option3: { name: string; value: string; id: string };
     correctOption: string;
   }[];
 }

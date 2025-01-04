@@ -1,9 +1,7 @@
 import { auth } from "@/auth";
 import { client } from "@/sanity/lib/client";
 import { TESTS_QUERY } from "@/sanity/lib/queries";
-
 import { Question, User as UserType } from "@/sanity/types";
-import { ITest } from "@/types";
 import Image from "next/image";
 import Link from "next/link";
 import { redirect } from "next/navigation";
@@ -16,7 +14,9 @@ const page = async () => {
 
   if (!session) redirect("/api/auth/signin");
 
-  const retrivedTests: TestsType[] = await client.fetch(TESTS_QUERY);
+  const retrivedTests: TestsType[] = await client
+    .withConfig({ useCdn: false })
+    .fetch(TESTS_QUERY);
 
   return (
     <main className="w-full px-4">

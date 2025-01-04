@@ -29,9 +29,9 @@ const AddQuestionForm = () => {
       questions: [
         {
           question: "",
-          option1: "",
-          option2: "",
-          option3: "",
+          option1: { name: "", value: "", id: "" },
+          option2: { name: "", value: "", id: "" },
+          option3: { name: "", value: "", id: "" },
           correctOption: "",
         },
       ],
@@ -44,6 +44,8 @@ const AddQuestionForm = () => {
   });
 
   const onSubmit = async (data: IFormInputs) => {
+    console.log(data);
+
     setIsLoading(true);
 
     const result = await createQuestion(data);
@@ -61,9 +63,9 @@ const AddQuestionForm = () => {
   const onClick = () => {
     append({
       question: "",
-      option1: "",
-      option2: "",
-      option3: "",
+      option1: { name: "", value: "", id: "" },
+      option2: { name: "", value: "", id: "" },
+      option3: { name: "", value: "", id: "" },
       correctOption: "",
     });
   };
@@ -94,6 +96,7 @@ const AddQuestionForm = () => {
             key={question.id}
             control={form.control}
             index={index}
+            setValue={form.setValue}
           />
         ))}
 

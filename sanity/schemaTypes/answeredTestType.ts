@@ -6,6 +6,7 @@ export const answeredTestType = defineType({
   title: "AnsweredTest",
   fields: [
     { name: "author", type: "reference", to: { type: "user" } },
+    { name: "id", type: "string" },
     {
       name: "answers",
       type: "array",
@@ -13,9 +14,8 @@ export const answeredTestType = defineType({
         {
           type: "object",
           fields: [
-            { name: "question1", type: "string" },
-            { name: "question2", type: "string" },
-            { name: "question3", type: "string" },
+            { name: "name", type: "string" },
+            { name: "value", type: "string" },
           ],
         },
       ],
