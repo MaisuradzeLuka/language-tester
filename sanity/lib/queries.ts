@@ -6,7 +6,8 @@ export const USER_BY_ID_QUERY =
     id,
     name,
     image,
-    email
+    email,
+    role
   }`);
 
 export const TESTS_QUERY =

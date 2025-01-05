@@ -44,8 +44,6 @@ const AddQuestionForm = () => {
   });
 
   const onSubmit = async (data: IFormInputs) => {
-    console.log(data);
-
     setIsLoading(true);
 
     const result = await createQuestion(data);
@@ -100,7 +98,7 @@ const AddQuestionForm = () => {
           />
         ))}
 
-        <div className="flex justify-between">
+        <div className="flex flex-col lg:flex-row gap-5 lg:gap-0 lg:justify-between">
           <Button
             type="submit"
             className={

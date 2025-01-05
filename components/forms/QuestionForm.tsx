@@ -58,7 +58,7 @@ const QuestionForm = ({ index, control, setValue }: IQuestionForm) => {
             <FormControl>
               <RadioGroup
                 onValueChange={field.onChange}
-                className="flex justify-between"
+                className="flex flex-col lg:flex-row gap-5 lg:gap-0 lg:justify-between"
               >
                 <div className="flex items-center gap-3">
                   <RadioGroupItem value={option1} id="option-one" />
@@ -66,7 +66,7 @@ const QuestionForm = ({ index, control, setValue }: IQuestionForm) => {
                     control={control}
                     name={`questions.${index}.option1`}
                     render={() => (
-                      <FormItem className="flex flex-col gap-2 ">
+                      <FormItem className="flex flex-col gap-2 w-full">
                         <FormControl>
                           <Input
                             type="text"
@@ -91,7 +91,7 @@ const QuestionForm = ({ index, control, setValue }: IQuestionForm) => {
                     control={control}
                     name={`questions.${index}.option2`}
                     render={() => (
-                      <FormItem className="flex flex-col gap-2 ">
+                      <FormItem className="flex flex-col gap-2 w-full">
                         <FormControl>
                           <Input
                             type="text"
@@ -116,7 +116,7 @@ const QuestionForm = ({ index, control, setValue }: IQuestionForm) => {
                     control={control}
                     name={`questions.${index}.option3`}
                     render={() => (
-                      <FormItem className="flex flex-col gap-2 ">
+                      <FormItem className="flex flex-col gap-2 w-full">
                         <FormControl>
                           <Input
                             type="text"

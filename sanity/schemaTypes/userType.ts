@@ -23,5 +23,9 @@ export const userType = defineType({
       name: "image",
       type: "string",
     }),
+    defineField({
+      name: "role",
+      type: "string",
+    }),
   ],
 });

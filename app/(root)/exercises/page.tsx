@@ -20,11 +20,11 @@ const page = async () => {
 
   return (
     <main className="w-full px-4">
-      <div className="flex-between w-full h-12 bg-yellow text-white font-semibold text-2xl my-4">
+      <div className="flex-between w-full h-12 bg-yellow text-white font-semibold text-2xl my-4 pl-4">
         ტესტები
       </div>
 
-      <section className="grid grid-cols-2 xs:grid-cols-3 justify-between gap-2 xs:gap-4 lg:gap-6 max-w-[1080px] mx-auto">
+      <section className="grid grid-cols-1 xs:grid-cols-3 justify-between gap-5 xs:gap-4 lg:gap-6 max-w-[1080px] mx-auto">
         {retrivedTests.map((test) => (
           <Link
             key={test._id}

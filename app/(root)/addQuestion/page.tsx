@@ -5,7 +5,7 @@ import { redirect } from "next/navigation";
 const Page = async () => {
   const session = await auth();
 
-  if (!session) redirect("/api/auth/signin");
+  if (session.role !== "ADMIN") redirect("/addQuestion/unauthorised");
 
   return (
     <main className="milky-background">

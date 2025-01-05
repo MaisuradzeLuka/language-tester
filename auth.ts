@@ -8,11 +8,13 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
   providers: [Google],
   callbacks: {
     async signIn({ profile }) {
-      const { sub: id, name, email, image } = profile;
+      const { sub: id, name, email, picture } = profile;
 
       const existingUser = await client
         .withConfig({ useCdn: false })
         .fetch(USER_BY_ID_QUERY, { id });
+
+      console.log(profile);
 
       if (!existingUser) {
         await writeClient.create({
@@ -21,7 +23,8 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
           id,
           name,
           email,
-          image,
+          image: picture,
+          role: "USER",
         });
       }
 
@@ -35,13 +38,14 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
           .fetch(USER_BY_ID_QUERY, { id: profile.sub });
 
         token.id = user.id;
+        token.role = user.role;
       }
 
       return token;
     },
 
     async session({ session, token }) {
-      Object.assign(session, { id: token.id });
+      Object.assign(session, { id: token.id, role: token.role });
       return session;
     },
   },
