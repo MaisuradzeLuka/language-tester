@@ -197,6 +197,7 @@ export type User = {
   name?: string;
   email?: string;
   image?: string;
+  role?: string;
 };
 
 export type AllSanitySchemaTypes = SanityImagePaletteSwatch | SanityImagePalette | SanityImageDimensions | SanityImageHotspot | SanityImageCrop | SanityFileAsset | SanityImageAsset | SanityImageMetadata | Geopoint | SanityAssetSourceData | AnsweredTest | Question | Slug | User;

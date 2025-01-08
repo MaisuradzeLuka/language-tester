@@ -8,6 +8,7 @@ import { Input } from "@/components/ui/input";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { generateRandomId } from "@/lib/utils";
 import { IFormInputs } from "@/types";
+import { useTranslations } from "next-intl";
 import { ChangeEvent, useState } from "react";
 import { Control, UseFormSetValue } from "react-hook-form";
 
@@ -21,6 +22,8 @@ const QuestionForm = ({ index, control, setValue }: IQuestionForm) => {
   const [option1] = useState(generateRandomId(8));
   const [option2] = useState(generateRandomId(8));
   const [option3] = useState(generateRandomId(8));
+
+  const t = useTranslations("AddQuestion");
 
   const handleChange = (
     e: ChangeEvent<HTMLInputElement>,
@@ -38,7 +41,7 @@ const QuestionForm = ({ index, control, setValue }: IQuestionForm) => {
         render={({ field }) => (
           <FormItem className="flex flex-col gap-2 ">
             <FormLabel className="text-xl font-medium border-none">
-              Question
+              {t("question")}
             </FormLabel>
             <FormControl>
               <Input type="text" {...field} />
@@ -48,7 +51,7 @@ const QuestionForm = ({ index, control, setValue }: IQuestionForm) => {
         )}
       />
 
-      <h3 className="text-xl font-medium border-none -mb-2">Options</h3>
+      <h3 className="text-xl font-medium border-none -mb-2">{t("options")}</h3>
 
       <FormField
         control={control}

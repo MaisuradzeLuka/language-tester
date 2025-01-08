@@ -19,8 +19,11 @@ import { createQuestion } from "@/lib/actions";
 import { redirect } from "next/navigation";
 import { useState } from "react";
 import { Input } from "../ui/input";
+import { useTranslations } from "next-intl";
 
 const AddQuestionForm = () => {
+  const t = useTranslations("AddQuestion");
+
   const [isLoading, setIsLoading] = useState(false);
   const form = useForm<z.infer<typeof questionsSchema>>({
     resolver: zodResolver(questionsSchema),
@@ -80,7 +83,7 @@ const AddQuestionForm = () => {
           render={({ field }) => (
             <FormItem className="flex flex-col gap-2 ">
               <FormLabel className="text-xl font-medium border-none">
-                Title
+                {t("title")}
               </FormLabel>
               <FormControl>
                 <Input type="text" {...field} />
@@ -106,14 +109,14 @@ const AddQuestionForm = () => {
             }
             disabled={isLoading}
           >
-            {isLoading ? "Loading..." : "Submit"}
+            {isLoading ? "Loading..." : t("submit")}
           </Button>
           <Button
             type="button"
             onClick={onClick}
             className="bg-yellow hover:bg-nav-grey"
           >
-            Add Question
+            {t("addQuestion")}
           </Button>
         </div>
       </form>

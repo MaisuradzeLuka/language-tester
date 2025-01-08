@@ -1,0 +1,44 @@
+{
+  "Navbar": {
+    "navlinks": {
+      "home": "",
+      "addQuestion": "",
+      "exercises": ""
+    }
+  },
+
+  "HomePage": {
+    "subtitle": "",
+    "paragraph": "",
+    "btn": ""
+  },
+
+  "AddQuestion": {
+    "pageTitle": "",
+    "title": "",
+    "question": "",
+    "options": "",
+    "submit": "",
+    "submiting": "",
+    "addQuestion": ""
+  },
+
+  "Exercises": {
+    "title": ""
+  },
+
+  "Exercise": {
+    "submit": "",
+    "submiting": ""
+  },
+
+  "Results": {
+    "title": ""
+  },
+
+  "Unauthorised": {
+    "title": "",
+    "msg": "",
+    "btn": ""
+  }
+}

@@ -5,8 +5,14 @@ import { ChangeEvent, useState } from "react";
 import { Button } from "../ui/button";
 import { redirect } from "next/navigation";
 import { answereTest } from "@/lib/actions";
+import { useTranslations } from "next-intl";
+import { usePathname } from "next/navigation";
 
 const TestAnswersForm = ({ test }: { test: Question }) => {
+  const pathName = usePathname();
+
+  const t = useTranslations("Exercise");
+
   const [answers, setAnswers] = useState<{ name: string; value: string }[]>([]);
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
@@ -28,8 +34,10 @@ const TestAnswersForm = ({ test }: { test: Question }) => {
   const handleSubmit = async () => {
     const result = await answereTest(answers, test._id);
 
+    const locale = pathName.slice(0, 3);
+
     if (result.status === "Success") {
-      redirect(`/exercises/${test._id}/results`);
+      redirect(`${locale}/exercises/${test._id}/results`);
     } else {
       console.log(result);
     }
@@ -81,7 +89,7 @@ const TestAnswersForm = ({ test }: { test: Question }) => {
       })}
 
       <Button type="submit" className="hover:bg-black bg-yellow">
-        Submit
+        {t("submit")}
       </Button>
     </form>
   );

@@ -2,8 +2,9 @@ import { auth } from "@/auth";
 import { client } from "@/sanity/lib/client";
 import { TESTS_QUERY } from "@/sanity/lib/queries";
 import { Question, User as UserType } from "@/sanity/types";
+import { getTranslations } from "next-intl/server";
 import Image from "next/image";
-import Link from "next/link";
+import { Link } from "@/i18n/routing";
 import { redirect } from "next/navigation";
 import { SiTicktick } from "react-icons/si";
 
@@ -11,6 +12,8 @@ type TestsType = Omit<Question, "author"> & { author?: UserType };
 
 const page = async () => {
   const session = await auth();
+
+  const t = await getTranslations("Exercises");
 
   if (!session) redirect("/api/auth/signin");
 
@@ -21,7 +24,7 @@ const page = async () => {
   return (
     <main className="w-full px-4">
       <div className="flex-between w-full h-12 bg-yellow text-white font-semibold text-2xl my-4 pl-4">
-        ტესტები
+        {t("title")}
       </div>
 
       <section className="grid grid-cols-1 xs:grid-cols-3 justify-between gap-5 xs:gap-4 lg:gap-6 max-w-[1080px] mx-auto">

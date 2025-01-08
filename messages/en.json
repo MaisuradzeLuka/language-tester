@@ -1,0 +1,44 @@
+{
+  "Navbar": {
+    "navlinks": {
+      "home": "Home",
+      "addQuestion": "Add Question",
+      "exercises": "Exercises"
+    }
+  },
+
+  "HomePage": {
+    "subtitle": "Test your knowledge anytime!",
+    "paragraph": "Quick testing of Language grammar and vocabulary, with answers and quick results!",
+    "btn": "Start Exercising!"
+  },
+
+  "AddQuestion": {
+    "pageTitle": "Add Question",
+    "title": "Title",
+    "question": "Question",
+    "options": "Options",
+    "submit": "Submit",
+    "submiting": "Loading...",
+    "addQuestion": "Add Quesiton"
+  },
+
+  "Exercises": {
+    "title": "Exercises"
+  },
+
+  "Exercise": {
+    "submit": "Submit",
+    "submiting": "Loading..."
+  },
+
+  "Results": {
+    "title": "Test results"
+  },
+
+  "Unauthorised": {
+    "title": "Unauthorized",
+    "msg": "You don’t have permission to access this page.",
+    "btn": "Go back home"
+  }
+}

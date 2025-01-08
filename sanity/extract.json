@@ -1074,6 +1074,13 @@
           "type": "string"
         },
         "optional": true
+      },
+      "role": {
+        "type": "objectAttribute",
+        "value": {
+          "type": "string"
+        },
+        "optional": true
       }
     }
   }

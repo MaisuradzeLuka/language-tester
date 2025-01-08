@@ -2,14 +2,15 @@ import { auth } from "@/auth";
 import { client } from "@/sanity/lib/client";
 import { RESULTS_BY_ID_QUERY, TEST_BY_ID_QUERY } from "@/sanity/lib/queries";
 import { AnsweredTest, Question } from "@/sanity/types";
-import { IQuestion } from "@/types";
+import { getTranslations } from "next-intl/server";
 import { redirect } from "next/navigation";
-import React from "react";
 
 const page = async ({ params }: { params: Promise<{ id: string }> }) => {
   const session = await auth();
 
   const id = (await params).id;
+
+  const t = await getTranslations("Results");
 
   const test: Question = await client.fetch(TEST_BY_ID_QUERY, { id });
   const results: AnsweredTest = await client.fetch(RESULTS_BY_ID_QUERY, { id });
@@ -58,7 +59,7 @@ const page = async ({ params }: { params: Promise<{ id: string }> }) => {
   return (
     <main className="milky-background">
       <div className="white-container">
-        <h1 className="page-heading">Test results</h1>
+        <h1 className="page-heading">{t("title")}</h1>
 
         {test.questions?.map((question, index) => (
           <div key={question._key} className="mb-20">
