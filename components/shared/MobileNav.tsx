@@ -3,14 +3,15 @@ import {
   SheetTrigger,
   SheetClose,
   SheetContent,
+  SheetTitle,
 } from "@/components/ui/sheet";
 import { navLinks } from "@/constants";
 import { useTranslations } from "next-intl";
 
-import Link from "next/link";
 import { RxHamburgerMenu } from "react-icons/rx";
 import LangSelector from "./LangSelector";
 import { SignOut } from "./SignOut";
+import { Link } from "@/i18n/routing";
 
 const MobileNav = ({ path }: { path: string }) => {
   const t = useTranslations("Navbar.navlinks");
@@ -29,6 +30,8 @@ const MobileNav = ({ path }: { path: string }) => {
         >
           <RxHamburgerMenu />
         </SheetTrigger>
+
+        <SheetTitle />
 
         <SheetContent className="flex flex-col justify-between bg-milky-white  text-xl font-semibold">
           <ul className=" font-semibold flex flex-col items-center gap-5 text-gray-700 mt-14">

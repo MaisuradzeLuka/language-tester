@@ -1,44 +1,44 @@
 {
   "Navbar": {
     "navlinks": {
-      "home": "",
-      "addQuestion": "",
-      "exercises": ""
+      "home": "Главная",
+      "addQuestion": "Добавить вопрос",
+      "exercises": "Упражнения"
     }
   },
 
   "HomePage": {
-    "subtitle": "",
-    "paragraph": "",
-    "btn": ""
+    "subtitle": "Проверяйте свои знания в любое время!",
+    "paragraph": "Быстрое тестирование грамматики и словарного запаса языка с ответами и мгновенными результатами!",
+    "btn": "Начать упражнения!"
   },
 
   "AddQuestion": {
-    "pageTitle": "",
-    "title": "",
-    "question": "",
-    "options": "",
-    "submit": "",
-    "submiting": "",
-    "addQuestion": ""
+    "pageTitle": "Добавить вопрос",
+    "title": "Название",
+    "question": "Вопрос",
+    "options": "Варианты ответа",
+    "submit": "Отправить",
+    "submiting": "Загрузка...",
+    "addQuestion": "Добавить вопрос"
   },
 
   "Exercises": {
-    "title": ""
+    "title": "Упражнения"
   },
 
   "Exercise": {
-    "submit": "",
-    "submiting": ""
+    "submit": "Отправить",
+    "submiting": "Загрузка..."
   },
 
   "Results": {
-    "title": ""
+    "title": "Результаты теста"
   },
 
   "Unauthorised": {
-    "title": "",
-    "msg": "",
-    "btn": ""
+    "title": "Нет доступа",
+    "msg": "У вас нет прав для доступа к этой странице.",
+    "btn": "Вернуться на главную"
   }
 }

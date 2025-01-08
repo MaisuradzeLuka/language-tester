@@ -16,13 +16,15 @@ import {
   FormMessage,
 } from "../ui/form";
 import { createQuestion } from "@/lib/actions";
-import { redirect } from "next/navigation";
+import { redirect, usePathname } from "next/navigation";
 import { useState } from "react";
 import { Input } from "../ui/input";
 import { useTranslations } from "next-intl";
 
 const AddQuestionForm = () => {
   const t = useTranslations("AddQuestion");
+
+  const pathName = usePathname();
 
   const [isLoading, setIsLoading] = useState(false);
   const form = useForm<z.infer<typeof questionsSchema>>({
@@ -53,7 +55,10 @@ const AddQuestionForm = () => {
 
     if (result.status === "Success") {
       form.reset();
-      redirect("/exercises");
+
+      const locale = pathName.slice(0, 3);
+
+      redirect(locale + "/exercises");
     } else {
       console.log(result);
     }

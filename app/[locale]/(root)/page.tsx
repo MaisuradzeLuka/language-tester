@@ -1,6 +1,6 @@
 import Image from "next/image";
-import Link from "next/link";
 import { getTranslations } from "next-intl/server";
+import { Link } from "@/i18n/routing";
 
 const Home = async () => {
   const t = await getTranslations("HomePage");
