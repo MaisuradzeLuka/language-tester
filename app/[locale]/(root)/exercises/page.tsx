@@ -7,6 +7,7 @@ import Image from "next/image";
 import { Link } from "@/i18n/routing";
 import { redirect } from "next/navigation";
 import { SiTicktick } from "react-icons/si";
+import ControlTestBtns from "@/components/shared/ControlTestBtns";
 
 type TestsType = Omit<Question, "author"> & { author?: UserType };
 
@@ -27,7 +28,7 @@ const page = async () => {
         {t("title")}
       </div>
 
-      <section className="grid grid-cols-1 xs:grid-cols-3 justify-between gap-5 xs:gap-4 lg:gap-6 max-w-[1080px] mx-auto">
+      <section className="grid grid-cols-1 xs:grid-cols-2 md:grid-cols-3 justify-between gap-5  md:gap-4 lg:gap-6 max-w-[1080px] mx-auto">
         {retrivedTests.map((test) => (
           <Link
             key={test._id}
@@ -58,6 +59,12 @@ const page = async () => {
               <p className="font-medium text-gray-500">
                 {test?.author?.name || ""}
               </p>
+
+              {session.id === test.author?._id ? (
+                <ControlTestBtns testId={test._id} />
+              ) : (
+                ""
+              )}
             </div>
           </Link>
         ))}

@@ -27,7 +27,8 @@ export const TEST_BY_ID_QUERY =
     slug,
     questions,
     _id,
-    title
+    title,
+    author -> {name, username, _id, image},
 }`);
 
 export const RESULTS_BY_ID_QUERY =

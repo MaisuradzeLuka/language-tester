@@ -15,14 +15,46 @@ import {
   FormLabel,
   FormMessage,
 } from "../ui/form";
-import { createQuestion } from "@/lib/actions";
+import { createQuestion, fetchTest } from "@/lib/actions";
 import { redirect, usePathname } from "next/navigation";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Input } from "../ui/input";
 import { useTranslations } from "next-intl";
+import { Question } from "@/sanity/types";
 
 const AddQuestionForm = () => {
   const t = useTranslations("AddQuestion");
+
+  useEffect(() => {
+    const testId = JSON.parse(sessionStorage.getItem("testId") || "null");
+
+    if (testId) {
+      fetchTest(testId).then((fetchedTest: Question) => {
+        form.reset({
+          title: fetchedTest.title || "",
+          questions: fetchedTest.questions?.map((q) => ({
+            question: q.question || "",
+            option1: {
+              name: q.option1?.name || "",
+              value: q.option1?.value || "",
+              id: q.option1?.id || "",
+            },
+            option2: {
+              name: q.option2?.name || "",
+              value: q.option2?.value || "",
+              id: q.option2?.id || "",
+            },
+            option3: {
+              name: q.option3?.name || "",
+              value: q.option3?.value || "",
+              id: q.option3?.id || "",
+            },
+            correctOption: q.correctOption || "",
+          })),
+        });
+      });
+    }
+  }, []);
 
   const pathName = usePathname();
 

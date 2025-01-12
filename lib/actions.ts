@@ -1,6 +1,8 @@
 "use server";
 
 import { auth } from "@/auth";
+import { client } from "@/sanity/lib/client";
+import { TEST_BY_ID_QUERY } from "@/sanity/lib/queries";
 import { writeClient } from "@/sanity/lib/writeClient";
 import { redirect } from "next/navigation";
 import slugify from "slugify";
@@ -67,4 +69,20 @@ export const answereTest = async (
   } catch (error: any) {
     return { status: "Error", message: error.message };
   }
+};
+
+export const deleteTest = async (id: string) => {
+  try {
+    console.log(id);
+
+    client.delete(id);
+  } catch (error: any) {
+    throw new Error("Something went wrong: " + error.message);
+  }
+};
+
+export const fetchTest = async (id: string) => {
+  const test = await client.fetch(TEST_BY_ID_QUERY, { id });
+
+  return test;
 };
