@@ -32,7 +32,6 @@ export const TEST_BY_ID_QUERY =
 }`);
 
 export const RESULTS_BY_ID_QUERY =
-  defineQuery(`*[_type == 'answeredTest' && id == $id][0]{
-  answers,
-  
+  defineQuery(`*[_type == 'answeredTest' && id == $id] | order(_createdAt desc)[0] {
+  answers
 }`);

@@ -15,7 +15,7 @@ import {
   FormLabel,
   FormMessage,
 } from "../ui/form";
-import { createQuestion, fetchTest } from "@/lib/actions";
+import { createOrReplaceQuestion, fetchTest } from "@/lib/actions";
 import { redirect, usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 import { Input } from "../ui/input";
@@ -53,6 +53,8 @@ const AddQuestionForm = () => {
           })),
         });
       });
+
+      sessionStorage.removeItem("testId");
     }
   }, []);
 
@@ -69,7 +71,7 @@ const AddQuestionForm = () => {
           option1: { name: "", value: "", id: "" },
           option2: { name: "", value: "", id: "" },
           option3: { name: "", value: "", id: "" },
-          correctOption: "",
+          correctOption: "", // ensure this is empty initially
         },
       ],
     },
@@ -83,7 +85,7 @@ const AddQuestionForm = () => {
   const onSubmit = async (data: IFormInputs) => {
     setIsLoading(true);
 
-    const result = await createQuestion(data);
+    const result = await createOrReplaceQuestion(data);
 
     if (result.status === "Success") {
       form.reset();
@@ -129,14 +131,24 @@ const AddQuestionForm = () => {
             </FormItem>
           )}
         />
-        {fields.map((question, index) => (
-          <QuestionForm
-            key={question.id}
-            control={form.control}
-            index={index}
-            setValue={form.setValue}
-          />
-        ))}
+        {fields.map((question, index) => {
+          const optionValues = {
+            option1: question.option1.id,
+            option2: question.option2.id,
+            option3: question.option3.id,
+            correctOption: question.correctOption,
+          };
+
+          return (
+            <QuestionForm
+              key={question.id}
+              control={form.control}
+              index={index}
+              setValue={form.setValue}
+              optionValues={optionValues}
+            />
+          );
+        })}
 
         <div className="flex flex-col lg:flex-row gap-5 lg:gap-0 lg:justify-between">
           <Button

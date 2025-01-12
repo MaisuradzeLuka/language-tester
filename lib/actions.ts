@@ -8,7 +8,7 @@ import { redirect } from "next/navigation";
 import slugify from "slugify";
 import { v4 as uuidv4 } from "uuid";
 
-export const createQuestion = async (formData: any) => {
+export const createOrReplaceQuestion = async (formData: any) => {
   const session = await auth();
 
   if (!session) redirect("/api/auth/signin");
@@ -25,17 +25,22 @@ export const createQuestion = async (formData: any) => {
     }));
 
     const questionType = {
+      _id: `question.${slug}`, // Ensure consistent document ID for replace functionality
+      _type: "question",
       author: { _type: "reference", _ref: session.id },
       title: formData.title,
       questions: questionsWithKeys,
-      slug: { _type: slug, current: slug },
+      slug: { _type: "slug", current: slug },
     };
 
     await writeClient
       .withConfig({ useCdn: false })
-      .create({ _type: "question", ...questionType });
+      .createOrReplace(questionType); // Replaced `create` with `createOrReplace`
 
-    return { status: "Success", message: "Question uploaded successfully" };
+    return {
+      status: "Success",
+      message: "Question uploaded or replaced successfully",
+    };
   } catch (error: any) {
     return { status: "Error", message: error.message };
   }

@@ -12,20 +12,34 @@ import { useTranslations } from "next-intl";
 import { ChangeEvent, useState } from "react";
 import { Control, UseFormSetValue } from "react-hook-form";
 
+interface OptionValues {
+  option1: string;
+  option2: string;
+  option3: string;
+  correctOption: string;
+  [key: string]: string; // Index signature
+}
+
 interface IQuestionForm {
   index: number;
   control: Control<IFormInputs, any>;
   setValue: UseFormSetValue<IFormInputs>;
+  optionValues: OptionValues;
 }
 
-const QuestionForm = ({ index, control, setValue }: IQuestionForm) => {
-  const [option1] = useState(generateRandomId(8));
-  const [option2] = useState(generateRandomId(8));
-  const [option3] = useState(generateRandomId(8));
-
-  console.log(control);
-
+const QuestionForm = ({
+  index,
+  control,
+  setValue,
+  optionValues,
+}: IQuestionForm) => {
   const t = useTranslations("AddQuestion");
+
+  const [options] = useState({
+    option1: generateRandomId(8),
+    option2: generateRandomId(8),
+    option3: generateRandomId(8),
+  });
 
   const handleChange = (
     e: ChangeEvent<HTMLInputElement>,
@@ -33,6 +47,9 @@ const QuestionForm = ({ index, control, setValue }: IQuestionForm) => {
     name: string
   ) => {
     setValue(name, { value: e.currentTarget.value, id, name });
+    if (e.currentTarget.value.trim() === "") {
+      setValue(`questions.${index}.correctOption`, ""); // Reset correctOption if input is empty
+    }
   };
 
   return (
@@ -58,105 +75,53 @@ const QuestionForm = ({ index, control, setValue }: IQuestionForm) => {
       <FormField
         control={control}
         name={`questions.${index}.correctOption`}
-        render={({ field }) => {
-          // console.log(field);
-
-          return (
-            <FormItem className="flex flex-col gap-2 ">
-              <FormControl>
-                <RadioGroup
-                  onValueChange={field.onChange}
-                  className="flex flex-col lg:flex-row gap-5 lg:gap-0 lg:justify-between"
-                >
-                  <div className="flex items-center gap-3">
-                    <RadioGroupItem
-                      value={field.value || option1}
-                      id="option-one"
-                    />
-                    <FormField
-                      control={control}
-                      name={`questions.${index}.option1`}
-                      render={() => (
-                        <FormItem className="flex flex-col gap-2 w-full">
-                          <FormControl>
-                            <Input
-                              type="text"
-                              onChange={(e) =>
-                                handleChange(
-                                  e,
-                                  option1,
-                                  `questions.${index}.option1`
-                                )
-                              }
-                            />
-                          </FormControl>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-                  </div>
-
-                  <div className="flex items-center gap-3">
-                    <RadioGroupItem
-                      value={field.value || option2}
-                      id="option-two"
-                    />
-                    <FormField
-                      control={control}
-                      name={`questions.${index}.option2`}
-                      render={() => (
-                        <FormItem className="flex flex-col gap-2 w-full">
-                          <FormControl>
-                            <Input
-                              type="text"
-                              onChange={(e) => {
-                                handleChange(
-                                  e,
-                                  option2,
-                                  `questions.${index}.option2`
-                                );
-                              }}
-                            />
-                          </FormControl>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-                  </div>
-
-                  <div className="flex items-center gap-3">
-                    <RadioGroupItem
-                      value={field.value || option3}
-                      id="option-three"
-                    />
-                    <FormField
-                      control={control}
-                      name={`questions.${index}.option3`}
-                      render={() => (
-                        <FormItem className="flex flex-col gap-2 w-full">
-                          <FormControl>
-                            <Input
-                              type="text"
-                              onChange={(e) =>
-                                handleChange(
-                                  e,
-                                  option3,
-                                  `questions.${index}.option3`
-                                )
-                              }
-                            />
-                          </FormControl>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-                  </div>
-                </RadioGroup>
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          );
-        }}
+        render={({ field }) => (
+          <FormItem className="flex flex-col gap-2">
+            <FormControl>
+              <RadioGroup
+                value={field.value} // Ensure default value is an empty string if no option is selected
+                onValueChange={field.onChange}
+                className="flex flex-col lg:flex-row gap-5 lg:gap-0 lg:justify-between"
+              >
+                {["option1", "option2", "option3"].map((optionKey, i) => {
+                  return (
+                    <div key={i} className="flex items-center gap-3">
+                      <RadioGroupItem
+                        value={optionValues[optionKey] || options[optionKey]}
+                        id={`option-${i + 1}`}
+                      />
+                      <FormField
+                        control={control}
+                        name={`questions.${index}.${optionKey}`}
+                        render={({ field: optionField }) => (
+                          <FormItem className="flex flex-col gap-2 w-full">
+                            <FormControl>
+                              <Input
+                                type="text"
+                                {...optionField}
+                                value={optionField.value?.value || ""}
+                                onChange={(e) =>
+                                  handleChange(
+                                    e,
+                                    optionValues[optionKey] ||
+                                      options[optionKey],
+                                    `questions.${index}.${optionKey}`
+                                  )
+                                }
+                              />
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                    </div>
+                  );
+                })}
+              </RadioGroup>
+            </FormControl>
+            <FormMessage />
+          </FormItem>
+        )}
       />
     </>
   );

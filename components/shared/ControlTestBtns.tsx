@@ -1,8 +1,6 @@
 "use client";
 
 import { deleteTest } from "@/lib/actions";
-import { client } from "@/sanity/lib/client";
-import { TEST_BY_ID_QUERY } from "@/sanity/lib/queries";
 import { redirect, usePathname, useRouter } from "next/navigation";
 import { FiEdit } from "react-icons/fi";
 import { MdOutlineDelete } from "react-icons/md";
