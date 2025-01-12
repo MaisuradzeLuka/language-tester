@@ -12,7 +12,9 @@ const page = async ({ params }: { params: Promise<{ id: string }> }) => {
 
   const t = await getTranslations("Results");
 
-  const test: Question = await client.fetch(TEST_BY_ID_QUERY, { id });
+  const test: Question = await client
+    .withConfig({ useCdn: false })
+    .fetch(TEST_BY_ID_QUERY, { id });
   const results: AnsweredTest = await client
     .withConfig({ useCdn: false })
     .fetch(RESULTS_BY_ID_QUERY, { id });
