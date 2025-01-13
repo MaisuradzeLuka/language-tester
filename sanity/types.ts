@@ -131,12 +131,7 @@ export type AnsweredTest = {
   _createdAt: string;
   _updatedAt: string;
   _rev: string;
-  author?: {
-    _ref: string;
-    _type: "reference";
-    _weak?: boolean;
-    [internalGroqTypeReferenceTo]?: "user";
-  };
+  author?: User;
   id?: string;
   answers?: Array<{
     name?: string;
@@ -151,12 +146,7 @@ export type Question = {
   _createdAt: string;
   _updatedAt: string;
   _rev: string;
-  author?: {
-    _ref: string;
-    _type: "reference";
-    _weak?: boolean;
-    [internalGroqTypeReferenceTo]?: "user";
-  };
+  author?: User;
   title?: string;
   slug?: Slug;
   questions?: Array<{
@@ -200,5 +190,19 @@ export type User = {
   role?: string;
 };
 
-export type AllSanitySchemaTypes = SanityImagePaletteSwatch | SanityImagePalette | SanityImageDimensions | SanityImageHotspot | SanityImageCrop | SanityFileAsset | SanityImageAsset | SanityImageMetadata | Geopoint | SanityAssetSourceData | AnsweredTest | Question | Slug | User;
+export type AllSanitySchemaTypes =
+  | SanityImagePaletteSwatch
+  | SanityImagePalette
+  | SanityImageDimensions
+  | SanityImageHotspot
+  | SanityImageCrop
+  | SanityFileAsset
+  | SanityImageAsset
+  | SanityImageMetadata
+  | Geopoint
+  | SanityAssetSourceData
+  | AnsweredTest
+  | Question
+  | Slug
+  | User;
 export declare const internalGroqTypeReferenceTo: unique symbol;
