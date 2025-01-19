@@ -20,7 +20,8 @@
     "options": "Варианты ответа",
     "submit": "Отправить",
     "submiting": "Загрузка...",
-    "addQuestion": "Добавить вопрос"
+    "addQuestion": "Добавить вопрос",
+    "text": ""
   },
 
   "Exercises": {

@@ -59,8 +59,8 @@ const TestAnswersForm = ({ test }: { test: Question }) => {
         const questionKey = question._key || `question-${index}`;
 
         return (
-          <>
-            <div key={questionKey} className="mb-20">
+          <div key={questionKey}>
+            <div className="mb-20">
               <div className="flex items-center gap-3">
                 <span className="flex-between rounded-full !justify-center w-8 h-8 bg-yellow text-white font-semibold text-xl">
                   {index + 1}
@@ -97,7 +97,7 @@ const TestAnswersForm = ({ test }: { test: Question }) => {
             ) : (
               ""
             )}
-          </>
+          </div>
         );
       })}
 

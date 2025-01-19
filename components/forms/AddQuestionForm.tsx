@@ -6,7 +6,7 @@ import { useFieldArray, useForm } from "react-hook-form";
 import { z } from "zod";
 import { Button } from "@/components/ui/button";
 import QuestionForm from "./QuestionForm";
-import { IFormInputs } from "@/types";
+import { IFormInputs, ISelectInputs } from "@/types";
 import {
   Form,
   FormControl,
@@ -21,6 +21,15 @@ import { useEffect, useState } from "react";
 import { Input } from "../ui/input";
 import { useTranslations } from "next-intl";
 import { Question } from "@/sanity/types";
+import { RxCross2 } from "react-icons/rx";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuGroup,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "../ui/dropdown-menu";
+import TextQuestionForm from "./TextQuestionForm";
 
 const AddQuestionForm = () => {
   const t = useTranslations("AddQuestion");
@@ -71,13 +80,14 @@ const AddQuestionForm = () => {
           option1: { name: "", value: "", id: "" },
           option2: { name: "", value: "", id: "" },
           option3: { name: "", value: "", id: "" },
-          correctOption: "", // ensure this is empty initially
+          correctOption: "",
+          type: "select",
         },
       ],
     },
   });
 
-  const { fields, append } = useFieldArray({
+  const { fields, append, remove } = useFieldArray({
     control: form.control,
     name: "questions",
   });
@@ -85,29 +95,46 @@ const AddQuestionForm = () => {
   const onSubmit = async (data: IFormInputs) => {
     setIsLoading(true);
 
-    const result = await createOrReplaceQuestion(data);
+    console.log(data);
 
-    if (result.status === "Success") {
-      form.reset();
+    // const result = await createOrReplaceQuestion(data);
 
-      const locale = pathName.slice(0, 3);
+    // if (result.status === "Success") {
+    //   form.reset();
 
-      redirect(locale + "/exercises");
-    } else {
-      console.log(result);
-    }
+    //   const locale = pathName.slice(0, 3);
+
+    //   redirect(locale + "/exercises");
+    // } else {
+    //   console.log(result);
+    // }
 
     setIsLoading(false);
   };
 
-  const onClick = () => {
-    append({
-      question: "",
-      option1: { name: "", value: "", id: "" },
-      option2: { name: "", value: "", id: "" },
-      option3: { name: "", value: "", id: "" },
-      correctOption: "",
-    });
+  const onClick = (value: string) => {
+    if (value === "select") {
+      append({
+        question: "",
+        option1: { name: "", value: "", id: "" },
+        option2: { name: "", value: "", id: "" },
+        option3: { name: "", value: "", id: "" },
+        correctOption: "",
+        type: "select",
+      });
+    } else {
+      append({
+        question: "",
+        text: "",
+        options: [
+          { name: "", value: "", id: "" },
+          { name: "", value: "", id: "" },
+          { name: "", value: "", id: "" },
+        ],
+        correctOption: "",
+        type: "text",
+      });
+    }
   };
 
   return (
@@ -132,22 +159,52 @@ const AddQuestionForm = () => {
           )}
         />
         {fields.map((question, index) => {
-          const optionValues = {
-            option1: question.option1.id,
-            option2: question.option2.id,
-            option3: question.option3.id,
-            correctOption: question.correctOption,
-          };
+          switch (question.type) {
+            case "select":
+              const optionValues: any = {
+                option1: question.option1.id,
+                option2: question.option2.id,
+                option3: question.option3.id,
+                correctOption: question.correctOption,
+              };
 
-          return (
-            <QuestionForm
-              key={question.id}
-              control={form.control}
-              index={index}
-              setValue={form.setValue}
-              optionValues={optionValues}
-            />
-          );
+              return (
+                <div key={question.id} className="relative group">
+                  <QuestionForm
+                    control={form.control}
+                    index={index}
+                    setValue={form.setValue}
+                    optionValues={optionValues}
+                    questionsLength={fields.length}
+                  />
+
+                  <button
+                    className="absolute top-1 right-0 text-red-500 duration-300 group-hover:block hover:scale-125 hidden"
+                    onClick={() => remove(index)}
+                  >
+                    <RxCross2 />
+                  </button>
+                </div>
+              );
+
+            case "text":
+              return (
+                <div key={question.id} className="relative group">
+                  <TextQuestionForm
+                    control={form.control}
+                    index={index}
+                    setValue={form.setValue}
+                    questionsLength={fields.length}
+                  />
+                  <button
+                    className="absolute top-1 right-0 text-red-500 duration-300 group-hover:block hover:scale-125 hidden"
+                    onClick={() => remove(index)}
+                  >
+                    <RxCross2 />
+                  </button>
+                </div>
+              );
+          }
         })}
 
         <div className="flex flex-col lg:flex-row gap-5 lg:gap-0 lg:justify-between">
@@ -160,13 +217,39 @@ const AddQuestionForm = () => {
           >
             {isLoading ? "Loading..." : t("submit")}
           </Button>
-          <Button
-            type="button"
-            onClick={onClick}
-            className="bg-yellow hover:bg-nav-grey"
-          >
-            {t("addQuestion")}
-          </Button>
+
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button
+                type="button"
+                className="bg-yellow hover:bg-nav-grey outline-0"
+              >
+                {t("addQuestion")}
+              </Button>
+            </DropdownMenuTrigger>
+
+            <DropdownMenuContent>
+              <DropdownMenuGroup>
+                <DropdownMenuItem textValue="select">
+                  <button
+                    value="select"
+                    onClick={(e) => onClick(e.currentTarget.value)}
+                  >
+                    Select
+                  </button>
+                </DropdownMenuItem>
+
+                <DropdownMenuItem textValue="text">
+                  <button
+                    value="text"
+                    onClick={(e) => onClick(e.currentTarget.value)}
+                  >
+                    Text
+                  </button>
+                </DropdownMenuItem>
+              </DropdownMenuGroup>
+            </DropdownMenuContent>
+          </DropdownMenu>
         </div>
       </form>
     </Form>

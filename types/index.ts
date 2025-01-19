@@ -11,15 +11,26 @@ export interface IUserData {
   ans: number[];
 }
 
+export interface ISelectInputs {
+  question: string;
+  option1: { name: string; value: string; id: string };
+  option2: { name: string; value: string; id: string };
+  option3: { name: string; value: string; id: string };
+  correctOption: string;
+  type: string;
+}
+
+interface ITextInputs {
+  question: string;
+  text: string;
+  options: { name: string; value: string; id: string }[];
+  correctOption: string;
+  type: string;
+}
+
 export interface IFormInputs {
   title: string;
-  questions: {
-    question: string;
-    option1: { name: string; value: string; id: string };
-    option2: { name: string; value: string; id: string };
-    option3: { name: string; value: string; id: string };
-    correctOption: string;
-  }[];
+  questions: (ISelectInputs | ITextInputs)[];
 }
 
 export interface ITest {

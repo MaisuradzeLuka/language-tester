@@ -28,7 +28,7 @@ export const TEST_BY_ID_QUERY =
     questions,
     _id,
     title,
-    author -> {name, username, _id, image},
+    author -> {name, email, username, _id, image},
 }`);
 
 export const RESULTS_BY_ID_QUERY =

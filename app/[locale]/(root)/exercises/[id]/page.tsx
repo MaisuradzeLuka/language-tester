@@ -2,9 +2,11 @@ import { auth } from "@/auth";
 import TestAnswersForm from "@/components/forms/TestAnswersForm";
 import { client } from "@/sanity/lib/client";
 import { TEST_BY_ID_QUERY } from "@/sanity/lib/queries";
-import { Question } from "@/sanity/types";
+import { Question, User } from "@/sanity/types";
 import Image from "next/image";
 import { redirect } from "next/navigation";
+
+type QuestionType = Omit<Question, "author"> & { author: User };
 
 const page = async ({ params }: { params: Promise<{ id: string }> }) => {
   const session = await auth();
@@ -13,7 +15,7 @@ const page = async ({ params }: { params: Promise<{ id: string }> }) => {
 
   const id = (await params).id;
 
-  const test: Question = await client.fetch(TEST_BY_ID_QUERY, { id });
+  const test: QuestionType = await client.fetch(TEST_BY_ID_QUERY, { id });
 
   return (
     <main className="milky-background">
@@ -23,15 +25,15 @@ const page = async ({ params }: { params: Promise<{ id: string }> }) => {
 
       <div className="flex justify-center items-center gap-2 my-8">
         <Image
-          src={session.user?.image || ""}
+          src={test.author.image || ""}
           width={48}
           height={48}
           alt="Authore profile"
           className="rounded-full"
         />
         <div className="flex flex-col justify-center">
-          <h3 className="font-medium text-xl">{session.user?.name}</h3>
-          <p className="text-nav-grey text-sm">{session.user?.email}</p>
+          <h3 className="font-medium text-xl">{test.author?.name}</h3>
+          <p className="text-nav-grey text-sm">{test.author?.email}</p>
         </div>
       </div>
 

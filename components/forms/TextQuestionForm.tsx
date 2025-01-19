@@ -11,20 +11,12 @@ import { IFormInputs } from "@/types";
 import { useTranslations } from "next-intl";
 import { ChangeEvent, useState } from "react";
 import { Control, UseFormSetValue } from "react-hook-form";
-
-interface OptionValues {
-  option1: string;
-  option2: string;
-  option3: string;
-  correctOption: string;
-  [key: string]: string; // Index signature
-}
+import { Textarea } from "../ui/textarea";
 
 interface IQuestionForm {
   index: number;
   control: Control<IFormInputs, any>;
   setValue: UseFormSetValue<IFormInputs>;
-  optionValues: OptionValues;
   questionsLength: number;
 }
 
@@ -32,7 +24,6 @@ const QuestionForm = ({
   index,
   control,
   setValue,
-  optionValues,
   questionsLength,
 }: IQuestionForm) => {
   const t = useTranslations("AddQuestion");
@@ -72,6 +63,25 @@ const QuestionForm = ({
         )}
       />
 
+      <FormField
+        control={control}
+        name={`questions.${index}.text`}
+        render={({ field }) => {
+          return (
+            <FormItem className="flex flex-col gap-2 mt-4">
+              <FormLabel className="text-xl font-medium border-none">
+                {t("text")}
+              </FormLabel>
+              <FormControl>
+                <Textarea {...field} className="resize-none !h-40" />
+                {/* <Input type="textarea" {...field} /> */}
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          );
+        }}
+      />
+
       <h3 className="text-xl font-medium border-none my-8">{t("options")}</h3>
 
       <FormField
@@ -89,7 +99,7 @@ const QuestionForm = ({
                   return (
                     <div key={i} className="flex items-center gap-3">
                       <RadioGroupItem
-                        value={optionValues[optionKey] || options[optionKey]}
+                        value={options[optionKey]}
                         id={`option-${i + 1}`}
                       />
                       <FormField
@@ -105,8 +115,7 @@ const QuestionForm = ({
                                 onChange={(e) =>
                                   handleChange(
                                     e,
-                                    optionValues[optionKey] ||
-                                      options[optionKey],
+                                    options[optionKey],
                                     `questions.${index}.${optionKey}`
                                   )
                                 }

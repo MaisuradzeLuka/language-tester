@@ -14,8 +14,6 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
         .withConfig({ useCdn: false })
         .fetch(USER_BY_ID_QUERY, { id });
 
-      console.log(profile);
-
       if (!existingUser) {
         await writeClient.create({
           _type: "user",
