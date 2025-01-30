@@ -5,16 +5,17 @@ import { AnsweredTest, Question } from "@/sanity/types";
 import { getTranslations } from "next-intl/server";
 import { redirect } from "next/navigation";
 
-const page = async ({ params }: { params: Promise<{ id: string }> }) => {
+const page = async ({ params }: { params: { id: string } }) => {
   const session = await auth();
+  if (!session) redirect("/api/auth/signin");
 
-  const id = (await params).id;
-
+  const id = params.id;
   const t = await getTranslations("Results");
 
-  const test: Question = await client
+  const test: { questions: Question[] } = await client
     .withConfig({ useCdn: false })
     .fetch(TEST_BY_ID_QUERY, { id });
+
   const results: AnsweredTest = await client
     .withConfig({ useCdn: false })
     .fetch(RESULTS_BY_ID_QUERY, { id });
@@ -22,7 +23,7 @@ const page = async ({ params }: { params: Promise<{ id: string }> }) => {
   interface IOption {
     name?: string;
     value?: string;
-    id?: string;
+    _key?: string;
   }
 
   const checkAnswers = (
@@ -42,23 +43,21 @@ const page = async ({ params }: { params: Promise<{ id: string }> }) => {
     let colorClass = "text-black";
 
     if (answer) {
-      if (option.id === correctOptionId) {
+      if (option._key === correctOptionId) {
         colorClass = "text-green-500";
-      } else if (answer.value === option.id) {
+      } else if (answer.value === option.value) {
         colorClass = "text-red-500";
       }
     }
 
     if (!answer || answer.value !== correctOptionId) {
-      if (option.id === correctOptionId) {
+      if (option._key === correctOptionId) {
         colorClass = "text-green-500 font-bold";
       }
     }
 
     return <span className={colorClass}>{option.value}</span>;
   };
-
-  if (!session) redirect("/api/auth/signin");
 
   return (
     <main className="milky-background">
@@ -75,30 +74,16 @@ const page = async ({ params }: { params: Promise<{ id: string }> }) => {
             </div>
 
             <ul className="flex flex-col lg:flex-row lg:justify-between flex-wrap gap-y-6 mt-7">
-              <li>
-                {checkAnswers(
-                  question.option1!,
-                  question.correctOption!,
-                  question._key,
-                  results
-                )}
-              </li>
-              <li>
-                {checkAnswers(
-                  question.option2!,
-                  question.correctOption!,
-                  question._key,
-                  results
-                )}
-              </li>
-              <li>
-                {checkAnswers(
-                  question.option3!,
-                  question.correctOption!,
-                  question._key,
-                  results
-                )}
-              </li>
+              {question.options?.map((option) => (
+                <li key={option._key}>
+                  {checkAnswers(
+                    option,
+                    question.correctOption!,
+                    question._key,
+                    results
+                  )}
+                </li>
+              ))}
             </ul>
           </div>
         ))}

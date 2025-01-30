@@ -9,13 +9,9 @@ import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { generateRandomId } from "@/lib/utils";
 import { IFormInputs } from "@/types";
 import { useTranslations } from "next-intl";
-import { ChangeEvent, useState } from "react";
-import {
-  Control,
-  useFieldArray,
-  UseFormSetValue,
-  useWatch,
-} from "react-hook-form";
+import { ChangeEvent } from "react";
+import { Control, useFieldArray, UseFormSetValue } from "react-hook-form";
+import { Textarea } from "../ui/textarea";
 
 // interface OptionValues {
 //   option1: string;
@@ -31,6 +27,7 @@ interface IQuestionForm {
   setValue: UseFormSetValue<IFormInputs>;
   // optionValues: OptionValues;
   questionsLength: number;
+  type: "text" | "select";
 }
 
 const QuestionForm = ({
@@ -39,14 +36,9 @@ const QuestionForm = ({
   setValue,
   // optionValues,
   questionsLength,
+  type,
 }: IQuestionForm) => {
   const t = useTranslations("AddQuestion");
-
-  // const [optionValues] = useState({
-  //   option1: generateRandomId(8),
-  //   option2: generateRandomId(8),
-  //   option3: generateRandomId(8),
-  // });
 
   const handleChange = (
     e: ChangeEvent<HTMLInputElement>,
@@ -74,6 +66,7 @@ const QuestionForm = ({
             <FormLabel className="text-xl font-medium border-none">
               {t("question")}
             </FormLabel>
+
             <FormControl>
               <Input type="text" {...field} />
             </FormControl>
@@ -82,14 +75,31 @@ const QuestionForm = ({
         )}
       />
 
+      {type === "text" && (
+        <FormField
+          control={control}
+          name={`questions.${index}.text`}
+          render={({ field }) => (
+            <FormItem className="flex flex-col gap-2 ">
+              <FormLabel className="text-xl font-medium border-none mt-8">
+                {t("text")}
+              </FormLabel>
+
+              <FormControl>
+                <Textarea rows={10} {...field} />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+      )}
+
       <h3 className="text-xl font-medium border-none my-8">{t("options")}</h3>
 
       <FormField
         control={control}
         name={`questions.${index}.correctOption`}
         render={({ field }) => {
-          // console.log(control);
-
           return (
             <FormItem className="flex flex-col gap-2">
               <FormControl>
@@ -102,28 +112,26 @@ const QuestionForm = ({
                     return (
                       <div key={i} className="flex items-center gap-3">
                         <RadioGroupItem value={option.id} />
+
                         <FormField
                           control={control}
                           name={`questions.${index}.options.${i}`}
-                          render={({ field: optionField }) => {
-                            // console.log(optionField);
+                          render={({ field: optionField }) => (
+                            <FormItem className="flex flex-col gap-2 w-full">
+                              <FormControl>
+                                <Input
+                                  type="text"
+                                  {...optionField}
+                                  value={optionField.value?.value || ""}
+                                  onChange={(e) =>
+                                    handleChange(e, "f", optionField.name)
+                                  }
+                                />
+                              </FormControl>
 
-                            return (
-                              <FormItem className="flex flex-col gap-2 w-full">
-                                <FormControl>
-                                  <Input
-                                    type="text"
-                                    {...optionField}
-                                    value={optionField.value?.value || ""}
-                                    onChange={(e) =>
-                                      handleChange(e, "f", optionField.name)
-                                    }
-                                  />
-                                </FormControl>
-                                <FormMessage />
-                              </FormItem>
-                            );
-                          }}
+                              <FormMessage />
+                            </FormItem>
+                          )}
                         />
                       </div>
                     );

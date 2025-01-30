@@ -22,10 +22,19 @@ import QuestionForm from "./QuestionForm";
 import { RxCross2 } from "react-icons/rx";
 
 import { createOrReplaceQuestion, fetchTest } from "@/lib/actions";
-import TextQuestionForm from "./TextQuestionForm";
 
 import { Question } from "@/sanity/types";
-import { IFormInputs, ISelectInputs } from "@/types";
+import { IFormInputs } from "@/types";
+
+const basicQuestionSchema = {
+  question: "",
+  options: [
+    { name: "", value: "", customId: "" },
+    { name: "", value: "", customId: "" },
+    { name: "", value: "", customId: "" },
+  ],
+  correctOption: "",
+};
 
 const AddQuestionForm = () => {
   const t = useTranslations("AddQuestion");
@@ -67,18 +76,12 @@ const AddQuestionForm = () => {
 
   const [isLoading, setIsLoading] = useState(false);
   const form = useForm<z.infer<typeof questionsSchema>>({
-    // resolver: zodResolver(questionsSchema),
+    resolver: zodResolver(questionsSchema),
     defaultValues: {
       title: "",
       questions: [
         {
-          question: "",
-          options: [
-            { name: "", value: "", customId: "" },
-            { name: "", value: "", customId: "" },
-            { name: "", value: "", customId: "" },
-          ],
-          correctOption: "",
+          ...basicQuestionSchema,
           type: "select",
         },
       ],
@@ -93,19 +96,17 @@ const AddQuestionForm = () => {
   const onSubmit = async (data: IFormInputs) => {
     setIsLoading(true);
 
-    console.log(data);
+    const result = await createOrReplaceQuestion(data);
 
-    // const result = await createOrReplaceQuestion(data);
+    if (result.status === "Success") {
+      form.reset();
 
-    // if (result.status === "Success") {
-    //   form.reset();
+      const locale = pathName.slice(0, 3);
 
-    //   const locale = pathName.slice(0, 3);
-
-    //   redirect(locale + "/exercises");
-    // } else {
-    //   console.log(result);
-    // }
+      redirect(locale + "/exercises");
+    } else {
+      console.log(result);
+    }
 
     setIsLoading(false);
   };
@@ -113,25 +114,13 @@ const AddQuestionForm = () => {
   const onClick = (value: string) => {
     if (value === "select") {
       append({
-        question: "",
-        options: [
-          { name: "", value: "", customId: "" },
-          { name: "", value: "", customId: "" },
-          { name: "", value: "", customId: "" },
-        ],
-        correctOption: "",
+        ...basicQuestionSchema,
         type: "select",
       });
     } else {
       append({
-        question: "",
         text: "",
-        options: [
-          { name: "", value: "", customId: "" },
-          { name: "", value: "", customId: "" },
-          { name: "", value: "", customId: "" },
-        ],
-        correctOption: "",
+        ...basicQuestionSchema,
         type: "text",
       });
     }
@@ -176,6 +165,7 @@ const AddQuestionForm = () => {
                     setValue={form.setValue}
                     // optionValues={optionValues}
                     questionsLength={fields.length}
+                    type="select"
                   />
 
                   <button
@@ -190,18 +180,21 @@ const AddQuestionForm = () => {
             case "text":
               return (
                 <div key={question.id} className="relative group">
-                  {/* <TextQuestionForm
+                  <QuestionForm
                     control={form.control}
                     index={index}
                     setValue={form.setValue}
+                    // optionValues={optionValues}
                     questionsLength={fields.length}
+                    type="text"
                   />
+
                   <button
                     className="absolute top-1 right-0 text-red-500 duration-300 group-hover:block hover:scale-125 hidden"
                     onClick={() => remove(index)}
                   >
                     <RxCross2 />
-                  </button> */}
+                  </button>
                 </div>
               );
           }

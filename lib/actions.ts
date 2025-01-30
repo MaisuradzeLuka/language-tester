@@ -4,11 +4,12 @@ import { auth } from "@/auth";
 import { client } from "@/sanity/lib/client";
 import { TEST_BY_ID_QUERY } from "@/sanity/lib/queries";
 import { writeClient } from "@/sanity/lib/writeClient";
+import { IFormInputs, ISelectInputs, ITextInputs } from "@/types";
 import { redirect } from "next/navigation";
 import slugify from "slugify";
 import { v4 as uuidv4 } from "uuid";
 
-export const createOrReplaceQuestion = async (formData: any) => {
+export const createOrReplaceQuestion = async (formData: IFormInputs) => {
   const session = await auth();
 
   if (!session) redirect("/api/auth/signin");
@@ -19,13 +20,17 @@ export const createOrReplaceQuestion = async (formData: any) => {
       strict: true,
     });
 
-    const questionsWithKeys = formData.questions.map((question: any) => ({
+    const questionsWithKeys = formData.questions.map((question) => ({
       ...question,
       _key: uuidv4(),
+      options: question.options.map((option) => ({
+        ...option,
+        _key: uuidv4(),
+      })),
     }));
 
     const questionType = {
-      _id: `question.${slug}`, // Ensure consistent document ID for replace functionality
+      _id: `question.${slug}`,
       _type: "question",
       author: { _type: "reference", _ref: session.id },
       title: formData.title,
@@ -35,7 +40,7 @@ export const createOrReplaceQuestion = async (formData: any) => {
 
     await writeClient
       .withConfig({ useCdn: false })
-      .createOrReplace(questionType); // Replaced `create` with `createOrReplace`
+      .createOrReplace(questionType);
 
     return {
       status: "Success",

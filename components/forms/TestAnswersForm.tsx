@@ -1,6 +1,6 @@
 "use client";
 
-import { Question } from "@/sanity/types";
+import { Question, QuestionType } from "@/sanity/types";
 import { ChangeEvent, useState } from "react";
 import { Button } from "../ui/button";
 import { redirect } from "next/navigation";
@@ -8,7 +8,7 @@ import { answereTest } from "@/lib/actions";
 import { useTranslations } from "next-intl";
 import { usePathname } from "next/navigation";
 
-const TestAnswersForm = ({ test }: { test: Question }) => {
+const TestAnswersForm = ({ test }: { test: QuestionType }) => {
   const pathName = usePathname();
 
   const t = useTranslations("Exercise");
@@ -34,6 +34,8 @@ const TestAnswersForm = ({ test }: { test: Question }) => {
 
   const handleSubmit = async () => {
     setIsLoading(true);
+
+    console.log(answers);
 
     const result = await answereTest(answers, test._id);
 
@@ -68,15 +70,19 @@ const TestAnswersForm = ({ test }: { test: Question }) => {
                 <h3 className="text-xl font-semibold">{question.question}</h3>
               </div>
 
+              <div className="gap-y-6 mt-7">{question.text}</div>
+
               <ul className="flex flex-col lg:flex-row lg:justify-between flex-wrap gap-y-6 mt-7">
-                {[question.option1, question.option2, question.option3].map(
-                  (option, i) => (
+                {question?.options!.map((option, i) => {
+                  // console.log(option);
+
+                  return (
                     <li key={i}>
                       <input
                         type="radio"
                         name={`radio-group-of-${questionKey}`}
                         id={`${questionKey}-${i}`}
-                        value={option?.id}
+                        value={option?.value}
                         onChange={handleChange}
                         className="hidden peer"
                       />
@@ -87,8 +93,8 @@ const TestAnswersForm = ({ test }: { test: Question }) => {
                         {option?.value}
                       </label>
                     </li>
-                  )
-                )}
+                  );
+                })}
               </ul>
             </div>
 

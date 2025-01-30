@@ -2,11 +2,9 @@ import { auth } from "@/auth";
 import TestAnswersForm from "@/components/forms/TestAnswersForm";
 import { client } from "@/sanity/lib/client";
 import { TEST_BY_ID_QUERY } from "@/sanity/lib/queries";
-import { Question, User } from "@/sanity/types";
+import { Question, QuestionType, User } from "@/sanity/types";
 import Image from "next/image";
 import { redirect } from "next/navigation";
-
-type QuestionType = Omit<Question, "author"> & { author: User };
 
 const page = async ({ params }: { params: Promise<{ id: string }> }) => {
   const session = await auth();

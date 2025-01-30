@@ -161,6 +161,7 @@ export type Question = {
   slug?: Slug;
   questions?: Array<{
     question?: string;
+    text?: string;
     options?: Array<{
       name?: string;
       value?: string;
@@ -171,6 +172,8 @@ export type Question = {
     _key: string;
   }>;
 };
+
+export type QuestionType = Omit<Question, "author"> & { author: User };
 
 export type Slug = {
   _type: "slug";
@@ -191,5 +194,19 @@ export type User = {
   role?: string;
 };
 
-export type AllSanitySchemaTypes = SanityImagePaletteSwatch | SanityImagePalette | SanityImageDimensions | SanityImageHotspot | SanityImageCrop | SanityFileAsset | SanityImageAsset | SanityImageMetadata | Geopoint | SanityAssetSourceData | AnsweredTest | Question | Slug | User;
+export type AllSanitySchemaTypes =
+  | SanityImagePaletteSwatch
+  | SanityImagePalette
+  | SanityImageDimensions
+  | SanityImageHotspot
+  | SanityImageCrop
+  | SanityFileAsset
+  | SanityImageAsset
+  | SanityImageMetadata
+  | Geopoint
+  | SanityAssetSourceData
+  | AnsweredTest
+  | Question
+  | Slug
+  | User;
 export declare const internalGroqTypeReferenceTo: unique symbol;

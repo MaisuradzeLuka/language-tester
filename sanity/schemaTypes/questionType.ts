@@ -42,48 +42,14 @@ export const questionType = defineType({
                   fields: [
                     { name: "name", type: "string" },
                     { name: "value", type: "string" },
-                    { name: "id", type: "string" },
+                    { name: "customId", type: "string" },
                   ],
                 },
               ],
             },
-
-            // {
-            //   name: "option1",
-            //   type: "object",
-            //   title: "Option 1",
-            //   fields: [
-            //     { name: "name", type: "string", title: "Name" },
-            //     { name: "value", type: "string", title: "Value" },
-            //     { name: "id", type: "string", title: "Id" },
-            //   ],
-            // },
-            // {
-            //   name: "option2",
-            //   type: "object",
-            //   title: "Option 2",
-            //   fields: [
-            //     { name: "name", type: "string", title: "Name" },
-            //     { name: "value", type: "string", title: "Value" },
-            //     { name: "id", type: "string", title: "Id" },
-            //   ],
-            // },
-            // {
-            //   name: "option3",
-            //   type: "object",
-            //   title: "Option 3",
-            //   fields: [
-            //     { name: "name", type: "string", title: "Name" },
-            //     { name: "value", type: "string", title: "Value" },
-            //     { name: "id", type: "string", title: "Id" },
-            //   ],
-            // },
-            // {
-            //   name: "correctOption",
-            //   type: "string",
-            //   title: "Correct Option",
-            //   description: "The value of the correct option",
-            // },
+            { name: "type", type: "string" },
+            { name: "correctOption", type: "string" },
+            { name: "text", type: "string" },
           ],
         },
       ],
