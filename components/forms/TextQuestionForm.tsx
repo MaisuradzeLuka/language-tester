@@ -67,6 +67,8 @@ const QuestionForm = ({
         control={control}
         name={`questions.${index}.text`}
         render={({ field }) => {
+          console.log(field);
+
           return (
             <FormItem className="flex flex-col gap-2 mt-4">
               <FormLabel className="text-xl font-medium border-none">

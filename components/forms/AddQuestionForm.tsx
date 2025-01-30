@@ -1,85 +1,83 @@
 "use client";
 
+import { useEffect, useState } from "react";
+import { redirect, usePathname } from "next/navigation";
 import { questionsSchema } from "@/lib/validation";
+import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useFieldArray, useForm } from "react-hook-form";
-import { z } from "zod";
-import { Button } from "@/components/ui/button";
-import QuestionForm from "./QuestionForm";
-import { IFormInputs, ISelectInputs } from "@/types";
-import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from "../ui/form";
-import { createOrReplaceQuestion, fetchTest } from "@/lib/actions";
-import { redirect, usePathname } from "next/navigation";
-import { useEffect, useState } from "react";
-import { Input } from "../ui/input";
 import { useTranslations } from "next-intl";
-import { Question } from "@/sanity/types";
-import { RxCross2 } from "react-icons/rx";
+
+// prettier-ignore
 import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuGroup,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
+  Form, FormControl, FormField, FormItem, FormLabel, FormMessage,
+} from "../ui/form";
+// prettier-ignore
+import {
+    DropdownMenu, DropdownMenuContent, DropdownMenuGroup, DropdownMenuItem, DropdownMenuTrigger,
 } from "../ui/dropdown-menu";
+import { Button } from "@/components/ui/button";
+import { Input } from "../ui/input";
+import QuestionForm from "./QuestionForm";
+import { RxCross2 } from "react-icons/rx";
+
+import { createOrReplaceQuestion, fetchTest } from "@/lib/actions";
 import TextQuestionForm from "./TextQuestionForm";
+
+import { Question } from "@/sanity/types";
+import { IFormInputs, ISelectInputs } from "@/types";
 
 const AddQuestionForm = () => {
   const t = useTranslations("AddQuestion");
 
-  useEffect(() => {
-    const testId = JSON.parse(sessionStorage.getItem("testId") || "null");
+  // useEffect(() => {
+  //   const testId = JSON.parse(sessionStorage.getItem("testId") || "null");
 
-    if (testId) {
-      fetchTest(testId).then((fetchedTest: Question) => {
-        form.reset({
-          title: fetchedTest.title || "",
-          questions: fetchedTest.questions?.map((q) => ({
-            question: q.question || "",
-            option1: {
-              name: q.option1?.name || "",
-              value: q.option1?.value || "",
-              id: q.option1?.id || "",
-            },
-            option2: {
-              name: q.option2?.name || "",
-              value: q.option2?.value || "",
-              id: q.option2?.id || "",
-            },
-            option3: {
-              name: q.option3?.name || "",
-              value: q.option3?.value || "",
-              id: q.option3?.id || "",
-            },
-            correctOption: q.correctOption || "",
-          })),
-        });
-      });
+  //   if (testId) {
+  //     fetchTest(testId).then((fetchedTest: Question) => {
+  //       form.reset({
+  //         title: fetchedTest.title || "",
+  //         questions: fetchedTest.questions?.map((q) => ({
+  //           question: q.question || "",
+  //           option1: {
+  //             name: q.option1?.name || "",
+  //             value: q.option1?.value || "",
+  //             id: q.option1?.id || "",
+  //           },
+  //           option2: {
+  //             name: q.option2?.name || "",
+  //             value: q.option2?.value || "",
+  //             id: q.option2?.id || "",
+  //           },
+  //           option3: {
+  //             name: q.option3?.name || "",
+  //             value: q.option3?.value || "",
+  //             id: q.option3?.id || "",
+  //           },
+  //           correctOption: q.correctOption || "",
+  //         })),
+  //       });
+  //     });
 
-      sessionStorage.removeItem("testId");
-    }
-  }, []);
+  //     sessionStorage.removeItem("testId");
+  //   }
+  // }, []);
 
   const pathName = usePathname();
 
   const [isLoading, setIsLoading] = useState(false);
   const form = useForm<z.infer<typeof questionsSchema>>({
-    resolver: zodResolver(questionsSchema),
+    // resolver: zodResolver(questionsSchema),
     defaultValues: {
       title: "",
       questions: [
         {
           question: "",
-          option1: { name: "", value: "", id: "" },
-          option2: { name: "", value: "", id: "" },
-          option3: { name: "", value: "", id: "" },
+          options: [
+            { name: "", value: "", customId: "" },
+            { name: "", value: "", customId: "" },
+            { name: "", value: "", customId: "" },
+          ],
           correctOption: "",
           type: "select",
         },
@@ -116,9 +114,11 @@ const AddQuestionForm = () => {
     if (value === "select") {
       append({
         question: "",
-        option1: { name: "", value: "", id: "" },
-        option2: { name: "", value: "", id: "" },
-        option3: { name: "", value: "", id: "" },
+        options: [
+          { name: "", value: "", customId: "" },
+          { name: "", value: "", customId: "" },
+          { name: "", value: "", customId: "" },
+        ],
         correctOption: "",
         type: "select",
       });
@@ -127,9 +127,9 @@ const AddQuestionForm = () => {
         question: "",
         text: "",
         options: [
-          { name: "", value: "", id: "" },
-          { name: "", value: "", id: "" },
-          { name: "", value: "", id: "" },
+          { name: "", value: "", customId: "" },
+          { name: "", value: "", customId: "" },
+          { name: "", value: "", customId: "" },
         ],
         correctOption: "",
         type: "text",
@@ -161,12 +161,12 @@ const AddQuestionForm = () => {
         {fields.map((question, index) => {
           switch (question.type) {
             case "select":
-              const optionValues: any = {
-                option1: question.option1.id,
-                option2: question.option2.id,
-                option3: question.option3.id,
-                correctOption: question.correctOption,
-              };
+              // const optionValues: any = {
+              //   option1: question.option1.id,
+              //   option2: question.option2.id,
+              //   option3: question.option3.id,
+              //   correctOption: question.correctOption,
+              // };
 
               return (
                 <div key={question.id} className="relative group">
@@ -174,7 +174,7 @@ const AddQuestionForm = () => {
                     control={form.control}
                     index={index}
                     setValue={form.setValue}
-                    optionValues={optionValues}
+                    // optionValues={optionValues}
                     questionsLength={fields.length}
                   />
 
@@ -190,7 +190,7 @@ const AddQuestionForm = () => {
             case "text":
               return (
                 <div key={question.id} className="relative group">
-                  <TextQuestionForm
+                  {/* <TextQuestionForm
                     control={form.control}
                     index={index}
                     setValue={form.setValue}
@@ -201,7 +201,7 @@ const AddQuestionForm = () => {
                     onClick={() => remove(index)}
                   >
                     <RxCross2 />
-                  </button>
+                  </button> */}
                 </div>
               );
           }

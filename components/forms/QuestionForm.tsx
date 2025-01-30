@@ -10,21 +10,26 @@ import { generateRandomId } from "@/lib/utils";
 import { IFormInputs } from "@/types";
 import { useTranslations } from "next-intl";
 import { ChangeEvent, useState } from "react";
-import { Control, UseFormSetValue } from "react-hook-form";
+import {
+  Control,
+  useFieldArray,
+  UseFormSetValue,
+  useWatch,
+} from "react-hook-form";
 
-interface OptionValues {
-  option1: string;
-  option2: string;
-  option3: string;
-  correctOption: string;
-  [key: string]: string; // Index signature
-}
+// interface OptionValues {
+//   option1: string;
+//   option2: string;
+//   option3: string;
+//   correctOption: string;
+//   [key: string]: string; // Index signature
+// }
 
 interface IQuestionForm {
   index: number;
   control: Control<IFormInputs, any>;
   setValue: UseFormSetValue<IFormInputs>;
-  optionValues: OptionValues;
+  // optionValues: OptionValues;
   questionsLength: number;
 }
 
@@ -32,27 +37,32 @@ const QuestionForm = ({
   index,
   control,
   setValue,
-  optionValues,
+  // optionValues,
   questionsLength,
 }: IQuestionForm) => {
   const t = useTranslations("AddQuestion");
 
-  const [options] = useState({
-    option1: generateRandomId(8),
-    option2: generateRandomId(8),
-    option3: generateRandomId(8),
-  });
+  // const [optionValues] = useState({
+  //   option1: generateRandomId(8),
+  //   option2: generateRandomId(8),
+  //   option3: generateRandomId(8),
+  // });
 
   const handleChange = (
     e: ChangeEvent<HTMLInputElement>,
     id: string,
-    name: string
+    name: `questions.${number}.options.${number}`
   ) => {
-    setValue(name, { value: e.currentTarget.value, id, name });
-    if (e.currentTarget.value.trim() === "") {
-      setValue(`questions.${index}.correctOption`, ""); // Reset correctOption if input is empty
-    }
+    setValue(name, { value: e.currentTarget.value, customId: id, name });
+    // if (e.currentTarget.value.trim() === "") {
+    //   setValue(`questions.${index}.correctOption`, "");
+    // }
   };
+
+  const { fields } = useFieldArray({
+    control,
+    name: `questions.${index}.options`,
+  });
 
   return (
     <>
@@ -77,53 +87,53 @@ const QuestionForm = ({
       <FormField
         control={control}
         name={`questions.${index}.correctOption`}
-        render={({ field }) => (
-          <FormItem className="flex flex-col gap-2">
-            <FormControl>
-              <RadioGroup
-                value={field.value}
-                onValueChange={field.onChange}
-                className="flex flex-col lg:flex-row gap-5 lg:gap-0 lg:justify-between"
-              >
-                {["option1", "option2", "option3"].map((optionKey, i) => {
-                  return (
-                    <div key={i} className="flex items-center gap-3">
-                      <RadioGroupItem
-                        value={optionValues[optionKey] || options[optionKey]}
-                        id={`option-${i + 1}`}
-                      />
-                      <FormField
-                        control={control}
-                        name={`questions.${index}.${optionKey}`}
-                        render={({ field: optionField }) => (
-                          <FormItem className="flex flex-col gap-2 w-full">
-                            <FormControl>
-                              <Input
-                                type="text"
-                                {...optionField}
-                                value={optionField.value?.value || ""}
-                                onChange={(e) =>
-                                  handleChange(
-                                    e,
-                                    optionValues[optionKey] ||
-                                      options[optionKey],
-                                    `questions.${index}.${optionKey}`
-                                  )
-                                }
-                              />
-                            </FormControl>
-                            <FormMessage />
-                          </FormItem>
-                        )}
-                      />
-                    </div>
-                  );
-                })}
-              </RadioGroup>
-            </FormControl>
-            <FormMessage />
-          </FormItem>
-        )}
+        render={({ field }) => {
+          // console.log(control);
+
+          return (
+            <FormItem className="flex flex-col gap-2">
+              <FormControl>
+                <RadioGroup
+                  value={field.value}
+                  onValueChange={field.onChange}
+                  className="flex flex-col lg:flex-row gap-5 lg:gap-0 lg:justify-between"
+                >
+                  {fields.map((option, i) => {
+                    return (
+                      <div key={i} className="flex items-center gap-3">
+                        <RadioGroupItem value={option.id} />
+                        <FormField
+                          control={control}
+                          name={`questions.${index}.options.${i}`}
+                          render={({ field: optionField }) => {
+                            // console.log(optionField);
+
+                            return (
+                              <FormItem className="flex flex-col gap-2 w-full">
+                                <FormControl>
+                                  <Input
+                                    type="text"
+                                    {...optionField}
+                                    value={optionField.value?.value || ""}
+                                    onChange={(e) =>
+                                      handleChange(e, "f", optionField.name)
+                                    }
+                                  />
+                                </FormControl>
+                                <FormMessage />
+                              </FormItem>
+                            );
+                          }}
+                        />
+                      </div>
+                    );
+                  })}
+                </RadioGroup>
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          );
+        }}
       />
 
       {index + 1 !== questionsLength ? (

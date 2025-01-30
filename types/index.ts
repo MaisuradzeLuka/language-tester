@@ -12,20 +12,18 @@ export interface IUserData {
 }
 
 export interface ISelectInputs {
+  type: "select";
   question: string;
-  option1: { name: string; value: string; id: string };
-  option2: { name: string; value: string; id: string };
-  option3: { name: string; value: string; id: string };
+  options: { name: string; value: string; customId: string }[];
   correctOption: string;
-  type: string;
 }
 
-interface ITextInputs {
+export interface ITextInputs {
+  type: "text";
   question: string;
   text: string;
-  options: { name: string; value: string; id: string }[];
+  options: { name: string; value: string; customId: string }[];
   correctOption: string;
-  type: string;
 }
 
 export interface IFormInputs {
@@ -38,9 +36,7 @@ export interface ITest {
   questions: [
     {
       question: string;
-      option1: string;
-      option2: string;
-      option3: string;
+      options: { name: string; value: string; id: string };
       correctOption: string;
       _id: string;
     },

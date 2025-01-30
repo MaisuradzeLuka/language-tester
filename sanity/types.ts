@@ -161,22 +161,13 @@ export type Question = {
   slug?: Slug;
   questions?: Array<{
     question?: string;
-    option1?: {
+    options?: Array<{
       name?: string;
       value?: string;
       id?: string;
-    };
-    option2?: {
-      name?: string;
-      value?: string;
-      id?: string;
-    };
-    option3?: {
-      name?: string;
-      value?: string;
-      id?: string;
-    };
-    correctOption?: string;
+      _type: "option";
+      _key: string;
+    }>;
     _key: string;
   }>;
 };
